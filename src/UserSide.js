@@ -16,7 +16,7 @@ function UserSide() {
   const location = useLocation();
 
   const [me, setMe] = useState("");
-  const [stream, setStream] = useState();
+  // const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState();
@@ -66,38 +66,38 @@ function UserSide() {
     });
     // }
   }, [callAccess, locate]);
-  const callUser = (id) => {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: stream,
-    });
-    //   if (locate) {
-    //     peer.on("signal", (data) => {
-    //       socket.emit("callUser", {
-    //         userToCall: id,
-    //         signalData: data,
-    //         from: me,
-    //         name: name,
-    //       });
-    //     });
-    //     peer.on("stream", (stream) => {
-    //       userVideo.current.srcObject = stream;
-    //     });
-    //     // socket.on("callAccepted", (signal) => {
-    //     //   setCallAccepted(true);
-    //     //   peer.signal(signal);
-    //     // });
+  // const callUser = (id) => {
+  // const peer = new Peer({
+  //   initiator: true,
+  //   trickle: false,
+  //   stream: stream,
+  // });
+  //   if (locate) {
+  //     peer.on("signal", (data) => {
+  //       socket.emit("callUser", {
+  //         userToCall: id,
+  //         signalData: data,
+  //         from: me,
+  //         name: name,
+  //       });
+  //     });
+  //     peer.on("stream", (stream) => {
+  //       userVideo.current.srcObject = stream;
+  //     });
+  //     // socket.on("callAccepted", (signal) => {
+  //     //   setCallAccepted(true);
+  //     //   peer.signal(signal);
+  //     // });
 
-    //     connectionRef.current = peer;
-    //   }
-  };
+  //     connectionRef.current = peer;
+  //   }
+  // };
   const answerCall = () => {
     setCallAccepted(true);
     const peer = new Peer({
       initiator: false,
       trickle: false,
-      stream: stream,
+      // stream: stream,
     });
     peer.on("signal", (data) => {
       socket.emit("answerCall", { signal: data, to: caller });
