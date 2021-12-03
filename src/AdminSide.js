@@ -1,10 +1,10 @@
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
+// import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
-// import AssignmentIcon from "@material-ui/icons/Assignment";
-import PhoneIcon from "@material-ui/icons/Phone";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+// import PhoneIcon from "@material-ui/icons/Phone";
 import React, { useEffect, useRef, useState } from "react";
-// import { CopyToClipboard } from "react-copy-to-clipboard";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
@@ -22,7 +22,7 @@ function AdminSide() {
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
   const [callAccess, setCallAccess] = useState(true);
-  const [idToCall, setIdToCall] = useState("");
+  // const [idToCall, setIdToCall] = useState("");
   const [callEnded, setCallEnded] = useState(false);
   const [name, setName] = useState("");
   const [locate, setLocate] = useState(false);
@@ -121,13 +121,13 @@ function AdminSide() {
       <div className="container">
         <div className="video-container">
           <div className="video">
-            {stream && callAccess ? (
+            {callAccess ? (
               <video
                 playsInline
                 muted
                 ref={myVideo}
                 autoPlay
-                style={{ width: "600px" }}
+                style={{ width: "300px" }}
               />
             ) : (
               ""
@@ -153,7 +153,7 @@ function AdminSide() {
             onChange={(e) => setName(e.target.value)}
             style={{ marginBottom: "20px" }}
           />
-          {/* <CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
+          <CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
             <Button
               variant="contained"
               color="primary"
@@ -161,28 +161,29 @@ function AdminSide() {
             >
               Copy ID
             </Button>
-          </CopyToClipboard> */}
+          </CopyToClipboard>
 
-          <TextField
+          {/* <TextField
             id="filled-basic"
             label="ID to call"
             variant="filled"
             value={idToCall}
             onChange={(e) => setIdToCall(e.target.value)}
-          />
+          /> */}
           <div className="call-button">
-            {callAccepted && !callEnded ? (
+            {callAccepted && !callEnded && (
               <Button variant="contained" color="secondary" onClick={leaveCall}>
                 End Call
               </Button>
-            ) : (
-              <IconButton
-                color="primary"
-                aria-label="call"
-                onClick={() => callUser(idToCall)}
-              >
-                <PhoneIcon fontSize="large" />
-              </IconButton>
+              // )
+              //  : (
+              //   <IconButton
+              //     color="primary"
+              //     aria-label="call"
+              //     // onClick={() => callUser(idToCall)}
+              //   >
+              //     <PhoneIcon fontSize="large" />
+              //   </IconButton>
             )}
             {/* {idToCall} */}
           </div>
