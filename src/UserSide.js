@@ -1,8 +1,8 @@
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
+// import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import PhoneIcon from "@material-ui/icons/Phone";
+// import PhoneIcon from "@material-ui/icons/Phone";
 import React, { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Peer from "simple-peer";
@@ -22,7 +22,7 @@ function UserSide() {
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
   const [callAccess, setCallAccess] = useState(true);
-  const [idToCall, setIdToCall] = useState("");
+  // const [idToCall, setIdToCall] = useState("");
   const [callEnded, setCallEnded] = useState(false);
   const [name, setName] = useState("");
 
@@ -72,25 +72,25 @@ function UserSide() {
       trickle: false,
       stream: stream,
     });
-    if (locate) {
-      peer.on("signal", (data) => {
-        socket.emit("callUser", {
-          userToCall: id,
-          signalData: data,
-          from: me,
-          name: name,
-        });
-      });
-      peer.on("stream", (stream) => {
-        userVideo.current.srcObject = stream;
-      });
-      // socket.on("callAccepted", (signal) => {
-      //   setCallAccepted(true);
-      //   peer.signal(signal);
-      // });
+    //   if (locate) {
+    //     peer.on("signal", (data) => {
+    //       socket.emit("callUser", {
+    //         userToCall: id,
+    //         signalData: data,
+    //         from: me,
+    //         name: name,
+    //       });
+    //     });
+    //     peer.on("stream", (stream) => {
+    //       userVideo.current.srcObject = stream;
+    //     });
+    //     // socket.on("callAccepted", (signal) => {
+    //     //   setCallAccepted(true);
+    //     //   peer.signal(signal);
+    //     // });
 
-      connectionRef.current = peer;
-    }
+    //     connectionRef.current = peer;
+    //   }
   };
   const answerCall = () => {
     setCallAccepted(true);
@@ -172,20 +172,21 @@ function UserSide() {
             onChange={(e) => setIdToCall(e.target.value)}
           /> */}
           <div className="call-button">
-            {callAccepted && !callEnded ? (
+            {callAccepted && !callEnded && (
               <Button variant="contained" color="secondary" onClick={leaveCall}>
                 End Call
               </Button>
-            ) : (
-              <IconButton
-                color="primary"
-                aria-label="call"
-                onClick={() => callUser(idToCall)}
-              >
-                <PhoneIcon fontSize="large" />
-              </IconButton>
+              // )
+              // : (
+              //   <IconButton
+              //     color="primary"
+              //     aria-label="call"
+              //     onClick={() => callUser(idToCall)}
+              //   >
+              //     <PhoneIcon fontSize="large" />
+              //   </IconButton>
             )}
-            {idToCall}
+            {/* {idToCall} */}
           </div>
           <Button
             variant="contained"
