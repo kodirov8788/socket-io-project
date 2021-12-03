@@ -115,11 +115,11 @@ function UserSide() {
   };
   return (
     <>
-      <Link className="link" to="/">
-        Main Page
-      </Link>
       <h1 style={{ textAlign: "center", color: "#fff" }}>User Side</h1>
       <div className="container">
+        <Link className="link" to="/">
+          Main Page
+        </Link>
         <div className="video-container">
           <div className="video">
             {/* {stream && callAccess ? (
