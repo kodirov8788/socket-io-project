@@ -56,17 +56,3 @@ body {
     #4776e6
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-.link {
-  color: #000;
-  background: #f5f5f5;
-  padding: 10px 20px;
-  border: 1px solid #000;
-  width: 100px;
-  text-decoration: none;
-  border-radius: 4px;
-  margin-top: 10px;
-}
-.link:hover {
-  background: #ccc;
-  color: rgb(185, 85, 85);
-}
