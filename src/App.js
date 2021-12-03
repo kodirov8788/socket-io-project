@@ -10,6 +10,9 @@ function App() {
       <Link className="link" to="/userside">
         User side
       </Link>
+      <h1 style={{ marginLeft: "10em", color: "white" }}>
+        Welcome to Video chat
+      </h1>
     </div>
   );
 }

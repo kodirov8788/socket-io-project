@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Peer from "simple-peer";
 import io from "socket.io-client";
-import "./Userside.css";
+import "./App.css";
 import { Link, useLocation } from "react-router-dom";
 
 const socket = io.connect("https://socket-io-herokuhost.herokuapp.com/");
@@ -116,10 +116,10 @@ function UserSide() {
   return (
     <>
       <h1 style={{ textAlign: "center", color: "#fff" }}>User Side</h1>
+      <Link className="link" to="/">
+        Main Page
+      </Link>
       <div className="container">
-        <Link className="link" to="/">
-          Main Page
-        </Link>
         <div className="video-container">
           <div className="video">
             {/* {stream && callAccess ? (
@@ -140,7 +140,7 @@ function UserSide() {
                 playsInline
                 ref={userVideo}
                 autoPlay
-                style={{ width: "300px" }}
+                style={{ width: "600px" }}
               />
             ) : null}
           </div>
