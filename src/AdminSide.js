@@ -64,33 +64,37 @@ function AdminSide() {
       });
     }
   }, [callAccess, locate]);
-  const callUser = (id) => {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: stream,
-    });
+  useEffect(
+    (id) => {
+      const peer = new Peer({
+        initiator: true,
+        trickle: false,
+        stream: stream,
+      });
 
-    if (locate) {
-      peer.on("signal", (data) => {
-        socket.emit("callUser", {
-          userToCall: id,
-          signalData: data,
-          from: me,
-          name: name,
+      if (locate) {
+        peer.on("signal", (data) => {
+          socket.emit("callUser", {
+            userToCall: id,
+            signalData: data,
+            from: me,
+            name: name,
+          });
         });
-      });
-      peer.on("stream", (stream) => {
-        userVideo.current.srcObject = stream;
-      });
-      socket.on("callAccepted", (signal) => {
-        setCallAccepted(true);
-        peer.signal(signal);
-      });
+        peer.on("stream", (stream) => {
+          userVideo.current.srcObject = stream;
+        });
+        socket.on("callAccepted", (signal) => {
+          setCallAccepted(true);
+          peer.signal(signal);
+        });
 
-      connectionRef.current = peer;
-    }
-  };
+        connectionRef.current = peer;
+      }
+    },
+    [locate, me, name, stream]
+  );
+  // const callUser = (id) => {};
   const answerCall = () => {
     setCallAccepted(true);
     const peer = new Peer({
