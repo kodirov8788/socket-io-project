@@ -27,7 +27,7 @@ function UserSide() {
   const [name, setName] = useState("");
 
   const [locate, setLocate] = useState(true);
-  const myVideo = useRef();
+  // const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
   console.log("Locate", locate);

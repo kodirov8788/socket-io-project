@@ -6,8 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminSide from "./AdminSide";
 import UserSide from "./UserSide";
-import reducer, { initialState } from "./reducer";
-import { StateProvider } from "./StateProvider";
+// import reducer, { initialState } from "./reducer";
+// import { StateProvider } from "./StateProvider";
 
 ReactDOM.render(
   <React.StrictMode>
