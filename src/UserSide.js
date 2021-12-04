@@ -9,7 +9,7 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = true;
+const localhost = false;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";

@@ -9,7 +9,7 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = true;
+const localhost = false;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
@@ -20,6 +20,7 @@ function AdminSide() {
 
   const location = useLocation();
   const [me, setMe] = useState("");
+  const [customId, setCustomId] = useState("");
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState("");
@@ -37,6 +38,7 @@ function AdminSide() {
   // console.log("Locate", locate);
 
   console.log("me >>>", me);
+  console.log("me >>>", customId);
   // console.log("name >>>", name);
   // console.log("caller >>>", caller);
   // console.log("receivingCall >>>", receivingCall);
@@ -69,6 +71,9 @@ function AdminSide() {
     socket?.on("me", (id) => {
       setMe(id);
     });
+    // io.sockets.socket(id).emit("updatedid", (customId) => {
+    //   setCustomId(customId);
+    // });
     socket?.on("callUser", (data) => {
       setReceivingCall(true);
       setCaller(data?.from);
