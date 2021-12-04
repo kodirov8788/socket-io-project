@@ -67,10 +67,10 @@ function AdminSide() {
             setStream(stream);
             myVideo.current.srcObject = stream;
           });
-      socket.on("me", (id) => {
+      socket?.on("me", (id) => {
         setMe(id);
       });
-      socket.on("callUser", (data) => {
+      socket?.on("callUser", (data) => {
         setReceivingCall(true);
         setCaller(data?.from);
         setName(data?.name);
@@ -88,7 +88,7 @@ function AdminSide() {
       });
 
       if (locate) {
-        peer.on("signal", (data) => {
+        peer?.on("signal", (data) => {
           socket.emit("callUser", {
             userToCall: id,
             signalData: data,
@@ -96,10 +96,10 @@ function AdminSide() {
             name: name,
           });
         });
-        peer.on("stream", (stream) => {
+        peer?.on("stream", (stream) => {
           userVideo.current.srcObject = stream;
         });
-        socket.on("callAccepted", (signal) => {
+        socket?.on("callAccepted", (signal) => {
           setCallAccepted(true);
           peer.signal(signal);
         });
