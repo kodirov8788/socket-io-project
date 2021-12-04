@@ -110,7 +110,7 @@ function AdminSide() {
         connectionRef.current = peer;
       }
     },
-    [locate, me, name, socket, stream]
+    [locate, me, name, stream]
   );
   // const callUser = (id) => {};
   const answerCall = () => {
