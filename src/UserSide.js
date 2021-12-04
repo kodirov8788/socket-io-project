@@ -5,8 +5,10 @@ import TextField from "@material-ui/core/TextField";
 // import AssignmentIcon from "@material-ui/icons/Assignment";
 import PhoneIcon from "@material-ui/icons/Phone";
 import React, { useEffect, useRef, useState } from "react";
-// import { CopyToClipboard } from "react-copy-to-clipboard";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import Peer from "simple-peer";
+import { FiCamera } from "react-icons/fi";
+import { HiChevronDoubleLeft } from "react-icons/hi";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
@@ -21,6 +23,7 @@ const port = localhost
 const socket = io.connect(port);
 
 function UserSide() {
+  const [click, setClick] = useState(false);
   const location = useLocation();
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
@@ -133,7 +136,7 @@ function UserSide() {
       <div className="container">
         <div className="video-container">
           {/* <div className="video">
-            {stream && callAccess ? (
+            {callAccess ? (
               <video
                 playsInline
                 muted
@@ -145,22 +148,20 @@ function UserSide() {
               ""
             )}
           </div> */}
-          <div className="video">
+          {/* <div className="video">
             {callAccepted && !callEnded ? (
-              <>
-                <h1>Guest Video</h1>
-                <video
-                  playsInline
-                  ref={userVideo}
-                  autoPlay
-                  style={{ width: "300px" }}
-                />
-              </>
+              <video
+                playsInline
+                ref={userVideo}
+                autoPlay
+                style={{ width: "300px" }}
+              />
             ) : null}
-          </div>
+          </div> */}
         </div>
-        <div className="myId">
-          {/* <TextField
+        <div className="main__container">
+          <div className={`myId ${click && "hover"}`}>
+            {/* <TextField
             id="filled-basic"
             label="Name"
             variant="filled"
@@ -168,56 +169,84 @@ function UserSide() {
             onChange={(e) => setName(e.target.value)}
             style={{ marginBottom: "20px" }}
           /> */}
-          {/* <CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AssignmentIcon fontSize="large" />}
-            >
-              Copy ID
-            </Button>
-          </CopyToClipboard> */}
-
-          <TextField
-            id="filled-basic"
-            label="ID to call"
-            variant="filled"
-            value={idToCall}
-            onChange={(e) => setIdToCall(e.target.value)}
-          />
-          <div className="call-button">
-            {callAccepted && !callEnded ? (
-              <Button variant="contained" color="secondary" onClick={leaveCall}>
-                End Call
-              </Button>
-            ) : (
-              <IconButton
-                color="primary"
-                aria-label="call"
-                onClick={() => callUser(idToCall)}
+            <div className="video__container">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  setClick(false);
+                }}
               >
-                <PhoneIcon fontSize="large" />
-              </IconButton>
-            )}
-            {/* {idToCall} */}
-          </div>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => setCallAccess(!callAccess)}
-          >
-            {callAccess ? "Switch off" : "Switch on"}
-          </Button>
-        </div>
-        <div>
-          {/* {!callAccepted ? (
-            <div className="caller">
-              <h1> is calling...</h1>
-              <Button variant="contained" color="primary" onClick={answerCall}>
-                Answer
+                <HiChevronDoubleLeft />
+                Quit
+              </Button>
+              <div className="video">
+                {callAccepted && !callEnded ? (
+                  <video
+                    playsInline
+                    ref={userVideo}
+                    autoPlay
+                    style={{ width: "90%", margin: "0 5%" }}
+                  />
+                ) : null}
+              </div>
+            </div>
+
+            <div className="buttons">
+              {/* <CopyToClipboard text={me}>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AssignmentIcon fontSize="large" />}
+              >
+                Copy ID
+              </Button>
+            </CopyToClipboard> */}
+
+              <TextField
+                id="filled-basic"
+                label="ID to call"
+                variant="filled"
+                value={idToCall}
+                onChange={(e) => setIdToCall(e.target.value)}
+              />
+              <div className="call-button">
+                {callAccepted && !callEnded ? (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={leaveCall}
+                  >
+                    End Call
+                  </Button>
+                ) : (
+                  <IconButton
+                    color="primary"
+                    aria-label="call"
+                    onClick={() => callUser(idToCall)}
+                  >
+                    <PhoneIcon fontSize="large" />
+                  </IconButton>
+                )}
+                {/* {idToCall} */}
+              </div>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setCallAccess(!callAccess)}
+              >
+                {callAccess ? "Switch off" : "Switch on"}
               </Button>
             </div>
-          ) : null} */}
+          </div>
+          <div
+            className="main__userCamereBtn"
+            onClick={() => {
+              setClick(!click);
+            }}
+          >
+            <FiCamera />
+          </div>
         </div>
       </div>
     </>
