@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
@@ -9,7 +10,7 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = false;
+const localhost = true;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
@@ -66,12 +67,12 @@ function UserSide() {
           // myVideo.current.srcObject = stream;
         });
 
-      // socket?.on("callUser", (data) => {
-      //   setReceivingCall(true);
-      //   setCaller(data?.from);
-      //   setName(data?.name);
-      //   setCallerSignal(data?.signal);
-      // });
+      socket?.on("callUser", (data) => {
+        setReceivingCall(true);
+        setCaller(data?.from);
+        setName(data?.name);
+        setCallerSignal(data?.signal);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locate]);
@@ -209,14 +210,14 @@ function UserSide() {
           </Button>
         </div>
         <div>
-          {!callAccepted ? (
+          {/* {!callAccepted ? (
             <div className="caller">
               <h1> is calling...</h1>
               <Button variant="contained" color="primary" onClick={answerCall}>
                 Answer
               </Button>
             </div>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
     </>
