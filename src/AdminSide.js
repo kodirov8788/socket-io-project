@@ -1,6 +1,6 @@
 import Button from "@material-ui/core/Button";
 // import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 // import PhoneIcon from "@material-ui/icons/Phone";
 import React, { useEffect, useRef, useState } from "react";
@@ -9,7 +9,7 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = false;
+const localhost = true;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
@@ -20,7 +20,7 @@ function AdminSide() {
 
   const location = useLocation();
   const [me, setMe] = useState("");
-  const [customId, setCustomId] = useState("");
+  // const [customId, setCustomId] = useState("");
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState("");
@@ -38,7 +38,7 @@ function AdminSide() {
   // console.log("Locate", locate);
 
   console.log("me >>>", me);
-  console.log("me >>>", customId);
+  // console.log("me >>>", customId);
   // console.log("name >>>", name);
   // console.log("caller >>>", caller);
   // console.log("receivingCall >>>", receivingCall);
@@ -110,7 +110,7 @@ function AdminSide() {
         connectionRef.current = peer;
       }
     },
-    [locate, stream]
+    [locate, me, name, socket, stream]
   );
   // const callUser = (id) => {};
   const answerCall = () => {
