@@ -67,12 +67,12 @@ function UserSide() {
           // myVideo.current.srcObject = stream;
         });
 
-      socket?.on("callUser", (data) => {
-        setReceivingCall(true);
-        setCaller(data?.from);
-        setName(data?.name);
-        setCallerSignal(data?.signal);
-      });
+      // socket?.on("callUser", (data) => {
+      //   setReceivingCall(true);
+      //   setCaller(data?.from);
+      //   setName(data?.name);
+      //   setCallerSignal(data?.signal);
+      // });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locate]);
