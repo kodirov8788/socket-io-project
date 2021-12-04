@@ -9,12 +9,14 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-
-const socket = io.connect("https://socket-io-herokuhost.herokuapp.com/");
-
+const localhost = false;
+const port = localhost
+  ? "http://localhost:5000"
+  : "https://socket-io-herokuhost.herokuapp.com/";
+const socket = io.connect(port);
 function UserSide() {
+  console.log("socket", socket);
   const location = useLocation();
-
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
@@ -37,10 +39,10 @@ function UserSide() {
   console.log("caller >>>", caller);
   console.log("receivingCall >>>", receivingCall);
   console.log("callerSignal >>>", callerSignal);
-  // console.log("callAccess", callAccess);
-  // console.log("stream", stream);
-  // console.log("myVideo", myVideo);
-  // console.log("userVideo", userVideo);
+  console.log("callAccess", callAccess);
+  console.log("stream", stream);
+  console.log("myVideo", myVideo);
+  console.log("userVideo", userVideo);
   useEffect(() => {
     if (location.pathname === "/userside") {
       setLocate(true);
@@ -49,7 +51,7 @@ function UserSide() {
   useEffect(() => {
     if (locate === true) {
       callAccess &&
-        navigator.mediaDevices
+        navigator?.mediaDevices
           .getUserMedia({ video: true, audio: true })
           .then((stream) => {
             setStream(stream);
@@ -60,12 +62,14 @@ function UserSide() {
       });
       socket.on("callUser", (data) => {
         setReceivingCall(true);
-        setCaller(data.from);
-        setName(data.name);
-        setCallerSignal(data.signal);
+        setCaller(data?.from);
+        setName(data?.name);
+        setCallerSignal(data?.signal);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callAccess, locate]);
+
   const callUser = (id) => {
     const peer = new Peer({
       initiator: true,
@@ -88,10 +92,10 @@ function UserSide() {
         setCallAccepted(true);
         peer.signal(signal);
       });
-
       connectionRef.current = peer;
     }
   };
+
   const answerCall = () => {
     setCallAccepted(true);
     const peer = new Peer({

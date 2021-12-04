@@ -9,12 +9,15 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-
-const socket = io.connect("https://socket-io-herokuhost.herokuapp.com/");
-
+const localhost = false;
+const port = localhost
+  ? "http://localhost:5000"
+  : "https://socket-io-herokuhost.herokuapp.com/";
+const socket = io.connect(port);
 function AdminSide() {
-  const location = useLocation();
+  console.log("socket", socket);
 
+  const location = useLocation();
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
@@ -29,25 +32,36 @@ function AdminSide() {
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
+
   // console.log("Locate", locate);
   console.log("me >>>", me);
   console.log("name >>>", name);
   console.log("caller >>>", caller);
   console.log("receivingCall >>>", receivingCall);
   console.log("callerSignal >>>", callerSignal);
-  // console.log("callAccess", callAccess);
-  // console.log("stream", stream);
-  // console.log("myVideo", myVideo);
-  // console.log("userVideo", userVideo);
+  console.log("callAccess", callAccess);
+  console.log("stream", stream);
+  console.log("myVideo", myVideo);
+  console.log("userVideo", userVideo);
   useEffect(() => {
     if (location.pathname === "/adminside") {
       setLocate(true);
     }
+    // if (callerSignal) {
+    //   x.push(callerSignal);
+    // } else {
+    //   x.push("Not defined");
+    // }
   }, [location]);
+  console.log(
+    "Test callerSignal >>>",
+    callerSignal === undefined ? "Undefined" : "Ok>>>"
+  );
+
   useEffect(() => {
     if (locate === true) {
       callAccess &&
-        navigator.mediaDevices
+        navigator?.mediaDevices
           .getUserMedia({ video: true, audio: true })
           .then((stream) => {
             setStream(stream);
@@ -58,12 +72,13 @@ function AdminSide() {
       });
       socket.on("callUser", (data) => {
         setReceivingCall(true);
-        setCaller(data.from);
-        setName(data.name);
-        setCallerSignal(data.signal);
+        setCaller(data?.from);
+        setName(data?.name);
+        setCallerSignal(data?.signal);
       });
     }
   }, [callAccess, locate]);
+
   useEffect(
     (id) => {
       const peer = new Peer({
