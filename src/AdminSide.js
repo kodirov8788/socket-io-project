@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@material-ui/core/Button";
 // import IconButton from "@material-ui/core/IconButton";
 // import TextField from "@material-ui/core/TextField";
@@ -9,7 +10,7 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = true;
+const localhost = false;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
@@ -80,6 +81,7 @@ function AdminSide() {
       setName(data?.name);
       setCallerSignal(data?.signal);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locate]);
 
   useEffect(
