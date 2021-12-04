@@ -9,13 +9,14 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = false;
+const localhost = true;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
-const socket = io.connect(port);
+
 function AdminSide() {
-  console.log("socket", socket);
+  const socket = io.connect(port);
+  // console.log("socket", socket);
 
   const location = useLocation();
   const [me, setMe] = useState("");
@@ -34,50 +35,47 @@ function AdminSide() {
   const connectionRef = useRef();
 
   // console.log("Locate", locate);
+
   console.log("me >>>", me);
-  console.log("name >>>", name);
-  console.log("caller >>>", caller);
-  console.log("receivingCall >>>", receivingCall);
-  console.log("callerSignal >>>", callerSignal);
-  console.log("callAccess", callAccess);
-  console.log("stream", stream);
-  console.log("myVideo", myVideo);
-  console.log("userVideo", userVideo);
+  // console.log("name >>>", name);
+  // console.log("caller >>>", caller);
+  // console.log("receivingCall >>>", receivingCall);
+  // console.log("callerSignal >>>", callerSignal);
+  // console.log("callAccess", callAccess);
+  // console.log("stream", stream);
+  // console.log("myVideo", myVideo);
+  // console.log("userVideo", userVideo);
   useEffect(() => {
     if (location.pathname === "/adminside") {
       setLocate(true);
     }
-    // if (callerSignal) {
-    //   x.push(callerSignal);
-    // } else {
-    //   x.push("Not defined");
-    // }
   }, [location]);
-  console.log(
-    "Test callerSignal >>>",
-    callerSignal === undefined ? "Undefined" : "Ok>>>"
-  );
 
   useEffect(() => {
-    if (locate === true) {
-      callAccess &&
-        navigator?.mediaDevices
-          .getUserMedia({ video: true, audio: true })
-          .then((stream) => {
-            setStream(stream);
-            myVideo.current.srcObject = stream;
-          });
-      socket?.on("me", (id) => {
-        setMe(id);
+    navigator?.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setStream(stream);
+        myVideo.current.srcObject = stream;
       });
-      socket?.on("callUser", (data) => {
-        setReceivingCall(true);
-        setCaller(data?.from);
-        setName(data?.name);
-        setCallerSignal(data?.signal);
-      });
-    }
-  }, [callAccess, locate]);
+
+    // -------------------------
+
+    // let customId = "0101";
+    // socket.on("connect", () => {
+    //   socket.emit("storeClientInfo", { customId: customId });
+    // });
+    // ------------------------------------------------------------------
+    socket?.on("me", (id) => {
+      setMe(id);
+    });
+    socket?.on("callUser", (data) => {
+      setReceivingCall(true);
+      setCaller(data?.from);
+      setName(data?.name);
+      setCallerSignal(data?.signal);
+    });
+  }, [locate]);
 
   useEffect(
     (id) => {
@@ -107,7 +105,7 @@ function AdminSide() {
         connectionRef.current = peer;
       }
     },
-    [locate, me, name, stream]
+    [locate, stream]
   );
   // const callUser = (id) => {};
   const answerCall = () => {
@@ -131,6 +129,7 @@ function AdminSide() {
     setCallEnded(true);
     connectionRef.current.destroy();
   };
+
   return (
     <>
       <h1 style={{ textAlign: "center", color: "#fff" }}>Admin Side</h1>
@@ -164,14 +163,14 @@ function AdminSide() {
           </div> */}
         </div>
         <div className="myId">
-          <TextField
+          {/* <TextField
             id="filled-basic"
             label="Name"
             variant="filled"
             value={name}
             onChange={(e) => setName(e.target.value)}
             style={{ marginBottom: "20px" }}
-          />
+          /> */}
           <CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
             <Button
               variant="contained"

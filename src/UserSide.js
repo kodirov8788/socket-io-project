@@ -9,13 +9,17 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = false;
+const localhost = true;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
+// socket.on("me") ;
+// console.log("socket >>>>", socket);
+// console.log("socket test>>>>", socket.on("me") !== "" && "yoq");
+// const socket = io.connect("http://localhost:5000");
 const socket = io.connect(port);
+
 function UserSide() {
-  console.log("socket", socket);
   const location = useLocation();
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
@@ -29,20 +33,21 @@ function UserSide() {
   const [name, setName] = useState("");
 
   const [locate, setLocate] = useState(false);
-  const myVideo = useRef();
+  // const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
-  console.log("Locate", locate);
+  // console.log("Locate", locate);
 
   console.log("me >>>", me);
-  console.log("name >>>", name);
-  console.log("caller >>>", caller);
-  console.log("receivingCall >>>", receivingCall);
-  console.log("callerSignal >>>", callerSignal);
-  console.log("callAccess", callAccess);
-  console.log("stream", stream);
-  console.log("myVideo", myVideo);
-  console.log("userVideo", userVideo);
+  // console.log("name >>>", name);
+  // console.log("caller >>>", caller);
+  // console.log("receivingCall >>>", receivingCall);
+  // console.log("callerSignal >>>", callerSignal);
+  // console.log("callAccepted", callAccepted);
+  // console.log("callAccess", callAccess);
+  // console.log("stream", stream);
+  // console.log("myVideo", myVideo);
+  // console.log("userVideo", userVideo);
   useEffect(() => {
     if (location.pathname === "/userside") {
       setLocate(true);
@@ -50,17 +55,18 @@ function UserSide() {
   }, [location]);
   useEffect(() => {
     if (locate === true) {
+      socket?.on("me", (id) => {
+        setMe(id);
+      });
       callAccess &&
         navigator?.mediaDevices
           .getUserMedia({ video: true, audio: true })
           .then((stream) => {
             setStream(stream);
-            myVideo.current.srcObject = stream;
+            // myVideo.current.srcObject = stream;
           });
-      socket.on("me", (id) => {
-        setMe(id);
-      });
-      socket.on("callUser", (data) => {
+
+      socket?.on("callUser", (data) => {
         setReceivingCall(true);
         setCaller(data?.from);
         setName(data?.name);
@@ -68,7 +74,7 @@ function UserSide() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [callAccess, locate]);
+  }, [locate]);
 
   const callUser = (id) => {
     const peer = new Peer({
@@ -77,7 +83,7 @@ function UserSide() {
       stream: stream,
     });
     if (locate) {
-      peer.on("signal", (data) => {
+      peer?.on("signal", (data) => {
         socket.emit("callUser", {
           userToCall: id,
           signalData: data,
@@ -85,12 +91,12 @@ function UserSide() {
           name: name,
         });
       });
-      peer.on("stream", (stream) => {
+      peer?.on("stream", (stream) => {
         userVideo.current.srcObject = stream;
       });
-      socket.on("callAccepted", (signal) => {
+      socket?.on("callAccepted", (signal) => {
         setCallAccepted(true);
-        peer.signal(signal);
+        peer?.signal(signal);
       });
       connectionRef.current = peer;
     }
@@ -125,7 +131,7 @@ function UserSide() {
       </Link>
       <div className="container">
         <div className="video-container">
-          <div className="video">
+          {/* <div className="video">
             {stream && callAccess ? (
               <video
                 playsInline
@@ -137,7 +143,7 @@ function UserSide() {
             ) : (
               ""
             )}
-          </div>
+          </div> */}
           <div className="video">
             {callAccepted && !callEnded ? (
               <>
@@ -153,14 +159,14 @@ function UserSide() {
           </div>
         </div>
         <div className="myId">
-          <TextField
+          {/* <TextField
             id="filled-basic"
             label="Name"
             variant="filled"
             value={name}
             onChange={(e) => setName(e.target.value)}
             style={{ marginBottom: "20px" }}
-          />
+          /> */}
           {/* <CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
             <Button
               variant="contained"
