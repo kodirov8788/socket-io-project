@@ -10,7 +10,7 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = true;
+const localhost = false;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
@@ -55,30 +55,32 @@ function AdminSide() {
   }, [location]);
 
   useEffect(() => {
-    // navigator?.mediaDevices
-    // .getUserMedia({ video: true, audio: true })
-    // .then((stream) => {
-    //   setStream(stream);
-    //   myVideo.current.srcObject = stream;
-    // });
+    navigator?.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setStream(stream);
+        myVideo.current.srcObject = stream;
+      });
+
     // -------------------------
+
     // let customId = "0101";
     // socket.on("connect", () => {
     //   socket.emit("storeClientInfo", { customId: customId });
     // });
     // ------------------------------------------------------------------
-    // socket?.on("me", (id) => {
-    //   setMe(id);
-    // });
+    socket?.on("me", (id) => {
+      setMe(id);
+    });
     // io.sockets.socket(id).emit("updatedid", (customId) => {
     //   setCustomId(customId);
     // });
-    // socket?.on("callUser", (data) => {
-    //   setReceivingCall(true);
-    //   setCaller(data?.from);
-    //   setName(data?.name);
-    //   setCallerSignal(data?.signal);
-    // });
+    socket?.on("callUser", (data) => {
+      setReceivingCall(true);
+      setCaller(data?.from);
+      setName(data?.name);
+      setCallerSignal(data?.signal);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locate]);
 
