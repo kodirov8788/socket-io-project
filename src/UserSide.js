@@ -10,7 +10,7 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 import { Link, useLocation } from "react-router-dom";
-const localhost = true;
+const localhost = false;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
@@ -24,9 +24,9 @@ function UserSide() {
   const location = useLocation();
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
-  // const [receivingCall, setReceivingCall] = useState(false);
-  // const [caller, setCaller] = useState("");
-  // const [callerSignal, setCallerSignal] = useState();
+  const [receivingCall, setReceivingCall] = useState(false);
+  const [caller, setCaller] = useState("");
+  const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
   const [callAccess, setCallAccess] = useState(true);
   const [idToCall, setIdToCall] = useState("");
@@ -67,12 +67,12 @@ function UserSide() {
           // myVideo.current.srcObject = stream;
         });
 
-      // socket?.on("callUser", (data) => {
-      //   setReceivingCall(true);
-      //   setCaller(data?.from);
-      //   setName(data?.name);
-      //   setCallerSignal(data?.signal);
-      // });
+      socket?.on("callUser", (data) => {
+        setReceivingCall(true);
+        setCaller(data?.from);
+        // setName(data?.name);
+        setCallerSignal(data?.signal);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locate]);
