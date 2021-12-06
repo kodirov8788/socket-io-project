@@ -34,7 +34,6 @@ function UserSide() {
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
-  const [callAccess, setCallAccess] = useState(true);
   const [idToCall, setIdToCall] = useState("");
   const [callEnded, setCallEnded] = useState(false);
   // const [name, setName] = useState("");
@@ -124,7 +123,7 @@ function UserSide() {
     stream.getTracks().forEach((track) => {
       track.stop();
     });
-    setCallEnded(true);
+    !callEnded && setCallEnded(true);
   };
   return (
     <>
@@ -185,13 +184,6 @@ function UserSide() {
                 )}
                 {/* {idToCall} */}
               </div>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => setCallAccess(!callAccess)}
-              >
-                {callAccess ? "Switch off" : "Switch on"}
-              </Button>
             </div>
           </div>
           {click ? (

@@ -26,12 +26,11 @@ function AdminSide() {
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
-  const [callAccess, setCallAccess] = useState(true);
   // const [idToCall, setIdToCall] = useState("");
   const [callEnded, setCallEnded] = useState(false);
   // const [name, setName] = useState("");
   const [locate, setLocate] = useState(false);
-  const myVideo = useRef();
+  // const myVideo = useRef();
   // const userVideo = useRef();
   const connectionRef = useRef();
 
@@ -67,7 +66,7 @@ function AdminSide() {
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           setStream(stream);
-          myVideo.current.srcObject = stream;
+          // myVideo.current.srcObject = stream;
         });
 
     socket?.on("callUser", (data) => {
@@ -109,7 +108,7 @@ function AdminSide() {
     stream.getTracks().forEach((track) => {
       track.stop();
     });
-    setCallEnded(true);
+    !callEnded && setCallEnded(true);
   };
 
   return (
@@ -125,15 +124,13 @@ function AdminSide() {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => {
-                setClick(false);
-              }}
+              onClick={CloseSidebar}
             >
               <HiChevronDoubleLeft />
               Quit
             </Button>
             <div className="video">
-              {callAccess ? (
+              {/* {callAccess ? (
                 <video
                   playsInline
                   muted
@@ -143,7 +140,7 @@ function AdminSide() {
                 />
               ) : (
                 ""
-              )}
+              )} */}
             </div>
           </div>
 
@@ -169,13 +166,6 @@ function AdminSide() {
                 </Button>
               )}
             </div>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => setCallAccess(!callAccess)}
-            >
-              {callAccess ? "Switch off" : "Switch on"}
-            </Button>
           </div>
         </div>
         <div>
