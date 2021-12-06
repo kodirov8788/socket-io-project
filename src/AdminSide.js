@@ -15,10 +15,9 @@ const port = localhost
   : "https://socket-io-herokuhost.herokuapp.com/";
 
 function AdminSide() {
-  const [click, setClick] = useState(false);
-
   const socket = io.connect(port);
   // console.log("socket", socket);
+  const [click, setClick] = useState(false);
 
   const location = useLocation();
   const [me, setMe] = useState("");
@@ -30,13 +29,13 @@ function AdminSide() {
   const [callAccess, setCallAccess] = useState(true);
   // const [idToCall, setIdToCall] = useState("");
   const [callEnded, setCallEnded] = useState(false);
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
   const [locate, setLocate] = useState(false);
   const myVideo = useRef();
-  const userVideo = useRef();
+  // const userVideo = useRef();
   const connectionRef = useRef();
 
-  // console.log("Locate", locate);
+  console.log("click >>>", click);
 
   console.log("me >>>", me);
   // console.log("me >>>", customId);
@@ -54,57 +53,32 @@ function AdminSide() {
     }
   }, [location]);
   useEffect(() => {
-    navigator?.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setStream(stream);
-        myVideo.current.srcObject = stream;
-      });
-
+    // navigator?.mediaDevices
+    //   .getUserMedia({ video: true, audio: true })
+    //   .then((stream) => {
+    //     setStream(stream);
+    //     myVideo.current.srcObject = stream;
+    //   });
     socket?.on("me", (id) => {
       setMe(id);
     });
+    click &&
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          setStream(stream);
+          myVideo.current.srcObject = stream;
+        });
 
     socket?.on("callUser", (data) => {
       setReceivingCall(true);
       setCaller(data?.from);
-      setName(data?.name);
+      // setName(data?.name);
       setCallerSignal(data?.signal);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locate]);
+  }, [locate, click]);
 
-  useEffect(
-    (id) => {
-      const peer = new Peer({
-        initiator: true,
-        trickle: false,
-        stream: stream,
-      });
-
-      if (locate) {
-        peer?.on("signal", (data) => {
-          socket.emit("callUser", {
-            userToCall: id,
-            signalData: data,
-            from: me,
-            name: name,
-          });
-        });
-        peer?.on("stream", (stream) => {
-          userVideo.current.srcObject = stream;
-        });
-        socket?.on("callAccepted", (signal) => {
-          setCallAccepted(true);
-          peer.signal(signal);
-        });
-
-        connectionRef.current = peer;
-      }
-    },
-    [locate, me, name, stream]
-  );
-  // const callUser = (id) => {};
   const answerCall = () => {
     setCallAccepted(true);
     const peer = new Peer({
@@ -125,6 +99,17 @@ function AdminSide() {
   const leaveCall = () => {
     setCallEnded(true);
     connectionRef.current.destroy();
+  };
+
+  const OpenSidebar = () => {
+    setClick(true);
+  };
+  const CloseSidebar = () => {
+    setClick(false);
+    stream.getTracks().forEach((track) => {
+      track.stop();
+    });
+    setCallEnded(true);
   };
 
   return (
@@ -203,14 +188,15 @@ function AdminSide() {
             </div>
           ) : null}
         </div>
-        <div
-          className="main__CamereBtn"
-          onClick={() => {
-            setClick(!click);
-          }}
-        >
-          <FiCamera />
-        </div>
+        {click ? (
+          <div className="main__userCamereBtn" onClick={CloseSidebar}>
+            <FiCamera />
+          </div>
+        ) : (
+          <div className="main__userCamereBtn" onClick={OpenSidebar}>
+            <FiCamera />
+          </div>
+        )}
       </div>
     </>
   );

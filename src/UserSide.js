@@ -62,27 +62,22 @@ function UserSide() {
     }
   }, [location]);
   useEffect(() => {
-    if (locate === true) {
+    if (locate) {
       socket?.on("me", (id) => {
         setMe(id);
       });
 
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          setStream(stream);
-          // myVideo.current.srcObject = stream;
-        });
-
-      socket?.on("callUser", (data) => {
-        setReceivingCall(true);
-        setCaller(data?.from);
-        // setName(data?.name);
-        setCallerSignal(data?.signal);
-      });
+      if (click) {
+        navigator.mediaDevices
+          .getUserMedia({ video: true, audio: true })
+          .then((stream) => {
+            setStream(stream);
+            // myVideo.current.srcObject = stream;
+          });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locate]);
+  }, [locate, click]);
 
   const callUser = (id) => {
     const peer = new Peer({
@@ -91,7 +86,7 @@ function UserSide() {
       stream: stream,
     });
     if (locate) {
-      peer?.on("signal", (data) => {
+      peer.on("signal", (data) => {
         socket.emit("callUser", {
           userToCall: id,
           signalData: data,
@@ -99,37 +94,37 @@ function UserSide() {
           // name: name,
         });
       });
-      peer?.on("stream", (stream) => {
+      peer.on("stream", (stream) => {
         userVideo.current.srcObject = stream;
       });
-      socket?.on("callAccepted", (signal) => {
+      socket.on("callAccepted", (signal) => {
         setCallAccepted(true);
-        peer?.signal(signal);
+        peer.signal(signal);
       });
       connectionRef.current = peer;
     }
   };
 
-  const answerCall = () => {
-    setCallAccepted(true);
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: stream,
-    });
-    // peer.on("signal", (data) => {
-    //   socket.emit("answerCall", { signal: data, to: caller });
-    // });
-    peer.on("stream", (stream) => {
-      userVideo.current.srcObject = stream;
-    });
-
-    // peer.signal(callerSignal);
-    // connectionRef.current = peer;
-  };
   const leaveCall = () => {
     setCallEnded(true);
     connectionRef.current.destroy();
+  };
+  const OpenSidebar = () => {
+    if (click === false) {
+      setClick(true);
+    } else {
+      setClick(false);
+      stream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
+  };
+  const CloseSidebar = () => {
+    setClick(false);
+    stream.getTracks().forEach((track) => {
+      track.stop();
+    });
+    setCallEnded(true);
   };
   return (
     <>
@@ -145,9 +140,7 @@ function UserSide() {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => {
-                  setClick(false);
-                }}
+                onClick={CloseSidebar}
               >
                 <HiChevronDoubleLeft />
                 Quit
@@ -201,14 +194,15 @@ function UserSide() {
               </Button>
             </div>
           </div>
-          <div
-            className="main__userCamereBtn"
-            onClick={() => {
-              setClick(!click);
-            }}
-          >
-            <FiCamera />
-          </div>
+          {click ? (
+            <div className="main__userCamereBtn" onClick={CloseSidebar}>
+              <FiCamera />
+            </div>
+          ) : (
+            <div className="main__userCamereBtn" onClick={OpenSidebar}>
+              <FiCamera />
+            </div>
+          )}
         </div>
       </div>
     </>
