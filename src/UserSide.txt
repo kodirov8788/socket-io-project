@@ -16,16 +16,13 @@ const localhost = false;
 const port = localhost
   ? "http://localhost:5000"
   : "https://socket-io-herokuhost.herokuapp.com/";
+// socket.on("me") ;
+// console.log("socket >>>>", socket);
+// console.log("socket test>>>>", socket.on("me") !== "" && "yoq");
+// const socket = io.connect("http://localhost:5000");
+const socket = io.connect(port);
 
 function UserSide() {
-  const [socket, setSocket] = useState();
-
-  useEffect(() => {
-    const socket2 = io.connect(port);
-    setSocket(socket2);
-  }, []);
-  console.log("socket", socket);
-
   const [click, setClick] = useState(false);
   const location = useLocation();
   const [me, setMe] = useState("");
@@ -56,6 +53,7 @@ function UserSide() {
   // console.log("myVideo", myVideo);
   // console.log("userVideo", userVideo);
 
+  
   useEffect(() => {
     if (location.pathname === "/userside") {
       setLocate(true);
@@ -70,7 +68,7 @@ function UserSide() {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
-          setStream(stream);
+          setStream( stream);
           // myVideo.current.srcObject = stream;
         });
 
@@ -138,9 +136,34 @@ function UserSide() {
         Main Page
       </Link>
       <div className="container">
-        <div className="video-container"></div>
+        <div className="video-container">
+          {/* <div className="video">
+            {callAccess ? (
+              <video
+                playsInline
+                muted
+                ref={myVideo}
+                autoPlay
+                style={{ width: "300px" }}
+              />
+            ) : (
+              ""
+            )}
+          </div> */}
+          {/* <div className="video">
+            {callAccepted && !callEnded ? (
+              <video
+                playsInline
+                ref={userVideo}
+                autoPlay
+                style={{ width: "300px" }}
+              />
+            ) : null}
+          </div> */}
+        </div>
         <div className="main__container">
           <div className={`myId ${click && "hover"}`}>
+            
             <div className="video__container">
               <Button
                 variant="contained"
@@ -165,6 +188,16 @@ function UserSide() {
             </div>
 
             <div className="buttons">
+              {/* <CopyToClipboard text={me}>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AssignmentIcon fontSize="large" />}
+              >
+                Copy ID
+              </Button>
+            </CopyToClipboard> */}
+
               <TextField
                 id="filled-basic"
                 label="ID to call"

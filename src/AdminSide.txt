@@ -1,8 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@material-ui/core/Button";
+// import IconButton from "@material-ui/core/IconButton";
+// import TextField from "@material-ui/core/TextField";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import { FiCamera } from "react-icons/fi";
 import { HiChevronDoubleLeft } from "react-icons/hi";
+// import PhoneIcon from "@material-ui/icons/Phone";
 import React, { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Peer from "simple-peer";
@@ -22,6 +25,7 @@ function AdminSide() {
 
   const location = useLocation();
   const [me, setMe] = useState("");
+  // const [customId, setCustomId] = useState("");
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState("");
@@ -60,11 +64,18 @@ function AdminSide() {
         setStream(stream);
         myVideo.current.srcObject = stream;
       });
-
+    // -------------------------
+    // let customId = "0101";
+    // socket.on("connect", () => {
+    //   socket.emit("storeClientInfo", { customId: customId });
+    // });
+    // ------------------------------------------------------------------
     socket?.on("me", (id) => {
       setMe(id);
     });
-
+    // io.sockets.socket(id).emit("updatedid", (customId) => {
+    //   setCustomId(customId);
+    // });
     socket?.on("callUser", (data) => {
       setReceivingCall(true);
       setCaller(data?.from);
@@ -134,8 +145,40 @@ function AdminSide() {
         Main Page
       </Link>
       <div className="container">
-        <div className="video-container"></div>
+        <div className="video-container">
+          {/* <div className="video">
+            {callAccess ? (
+              <video
+                playsInline
+                muted
+                ref={myVideo}
+                autoPlay
+                style={{ width: "300px" }}
+              />
+            ) : (
+              ""
+            )}
+          </div> */}
+          {/* <div className="video">
+            {callAccepted && !callEnded ? (
+              <video
+                playsInline
+                ref={userVideo}
+                autoPlay
+                style={{ width: "300px" }}
+              />
+            ) : null}
+          </div> */}
+        </div>
         <div className={`myId ${click && "hover"}`}>
+          {/* <TextField
+            id="filled-basic"
+            label="Name"
+            variant="filled"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{ marginBottom: "20px" }}
+          /> */}
           <div className="video__container">
             <Button
               variant="contained"
@@ -173,6 +216,13 @@ function AdminSide() {
               </Button>
             </CopyToClipboard>
 
+            {/* <TextField
+            id="filled-basic"
+            label="ID to call"
+            variant="filled"
+            value={idToCall}
+            onChange={(e) => setIdToCall(e.target.value)}
+          /> */}
             <div className="call-button">
               {callAccepted && !callEnded && (
                 <Button
@@ -182,7 +232,17 @@ function AdminSide() {
                 >
                   End Call
                 </Button>
+                // )
+                //  : (
+                //   <IconButton
+                //     color="primary"
+                //     aria-label="call"
+                //     // onClick={() => callUser(idToCall)}
+                //   >
+                //     <PhoneIcon fontSize="large" />
+                //   </IconButton>
               )}
+              {/* {idToCall} */}
             </div>
             <Button
               variant="contained"
